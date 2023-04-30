@@ -89,7 +89,12 @@ export default function DashboardAppPage() {
                 },
               ]}
             />
-          </Grid>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
           <Grid item xs={12} md={6} lg={4}>
             <AppCurrentVisits
