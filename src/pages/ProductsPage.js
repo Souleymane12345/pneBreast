@@ -1,49 +1,126 @@
+import React, { useState } from "react";
 import { Helmet } from 'react-helmet-async';
-import { useState } from 'react';
-// @mui
-import { Container, Stack, Typography } from '@mui/material';
+import { Container, Typography, Grid } from '@mui/material';
+import { Card, CardContent, CardMedia, Button, TextField } from "@mui/material";
+
 // components
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
-// mock
-import PRODUCTS from '../_mock/products';
+
+// sections
+
 
 // ----------------------------------------------------------------------
 
-export default function ProductsPage() {
-  const [openFilter, setOpenFilter] = useState(false);
+export default function DashboardAppPage() {
+  // eslint-disable-next-line
 
-  const handleOpenFilter = () => {
-    setOpenFilter(true);
-  };
+  const [input1Value, setInput1Value] = useState("");
+  const [input2Value, setInput2Value] = useState("");
+  const [submitValue, setSubmitValue] = useState("");
 
-  const handleCloseFilter = () => {
-    setOpenFilter(false);
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // do something with the submitted value
+  }
 
   return (
     <>
       <Helmet>
-        <title> Dashboard: Products | Minimal UI </title>
+        <title> Dashboard | Minimal UI </title>
       </Helmet>
 
-      <Container>
+      <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Diagnostic 
         </Typography>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <Card>
+            <CardContent>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Title for Image 1
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                image="https://source.unsplash.com/random/800x600"
+                alt="Random image"
+              />
 
-        <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card>
+            <CardContent>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Title for Image 1
+                </Typography>
+              </CardContent>
+
+              <CardMedia
+                component="img"
+                image="https://source.unsplash.com/random/800x600"
+                alt="Random image"
+              />
+
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Third Grid Item
+                </Typography>
+                <TextField
+                  label="Input 1"
+                  fullWidth
+                  value={input1Value}
+                  onChange={(e) => setInput1Value(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Third Grid Item
+                </Typography>
+                <TextField
+                  label="Input 2"
+                  fullWidth
+                  value={input2Value}
+                  onChange={(e) => setInput2Value(e.target.value)}
+                  sx={{ mb: 2 }}
+                />
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" sx={{ mb: 2 }}>
+                  Fourth Grid Item
+                </Typography>
+                <form onSubmit={handleSubmit}>
+                  <TextField
+                    label="Submit Value"
+                    fullWidth
+                    value={submitValue}
+                    onChange={(e) => setSubmitValue(e.target.value)}
+                    sx={{ mb: 2 }}
+                  />
+                  <br></br>
+                  <br></br>
+                  <br></br>
+                  <Button type="submit" variant="contained" color="primary">
+                    Submit
+                  </Button>
+                  <br></br>
+                  <br></br>
+                </form>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
       </Container>
     </>
   );
