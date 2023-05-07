@@ -10,10 +10,22 @@ import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import DashboardAppPage from './pages/DashboardAppPage';
 
+
+import Connexion from './components/authentication/connexion/Connexion';
+
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const routes = useRoutes([
+
+    {
+      path: '/',
+      element: <LoginPage />,
+      children: [
+        { element: <Navigate to="/" />, index: true },
+      ],
+    },
+
     {
       path: '/dashboard',
       element: <DashboardLayout />,
@@ -25,10 +37,15 @@ export default function Router() {
         { path: 'blog', element: <BlogPage /> },
       ],
     },
+
     {
-      path: 'login',
-      element: <LoginPage />,
+      path: '/connexion',
+      element: <Connexion />,
+      children: [
+        { element: <Navigate to="/connexion" />, index: true },
+      ],
     },
+
     {
       element: <SimpleLayout />,
       children: [

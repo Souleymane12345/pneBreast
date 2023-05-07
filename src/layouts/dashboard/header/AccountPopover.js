@@ -1,9 +1,12 @@
 import { useState } from 'react';
-// @mui
+import { Button } from 'primereact/button'
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
 import account from '../../../_mock/account';
+import { logout } from '../../../Redux/actions/userActions';
+
+import { useDispatch } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -26,14 +29,36 @@ const MENU_OPTIONS = [
 
 export default function AccountPopover() {
   const [open, setOpen] = useState(null);
+  const [valueshow, setValueShow] = useState(false)
+  const dispatch = useDispatch()
+
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
   };
 
-  const handleClose = () => {
-    setOpen(null);
-  };
+  const handleShowClose = () => {
+    setValueShow(!valueshow)
+  }
+
+  const handleCloseConfirm = () => {
+    setValueShow(!valueshow)
+    dispatch(logout())
+  }
+
+
+    const renderFooterDeconnexion = () => {
+      return(
+        <div style={{marginTop:-20}}>
+          <Button label="Non" className="p-button-rounded p-button-info p-button-text" icon="pi pi-times" aria-label="Non" onClick={() => handleShowClose()} />
+          <Button label="Oui, bien-sûr" className="p-button-rounded p-button-danger p-button-text" icon="pi pi-check" aria-label="Oui, bien-sûr" onClick={() => handleCloseConfirm()} />
+        </div>
+      )
+    }
+
+    const handleClose = () => {
+      console.log("okko");
+    }
 
   return (
     <>
@@ -97,7 +122,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
+        <MenuItem onClick={()=> renderFooterDeconnexion()} sx={{ m: 1 }}>
           Logout
         </MenuItem>
       </Popover>
