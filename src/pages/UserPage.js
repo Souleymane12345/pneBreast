@@ -128,14 +128,21 @@ const UserPage = () => {
         <Button
           icon="pi pi-align-justify"
           className="p-button-sm p-button-primary"
-          aria-label="Voir details d'examens"
-          title="Voir details d'examens"
-          label="Voir details d'examens"
+          aria-label="Enregistrer diagnostic"
+          title="Enregistrer diagnostic"
+          label="Enregistrer diagnostic"
           style={{ height: "2rem" }}
           onClick={() => lienPatientParse("/dashboard/blog/", rowData.group_id)}
         />
 
-
+        &nbsp;&nbsp;&nbsp;&nbsp; {/* Add space between the buttons */}
+        <Button
+          className="p-button-sm p-button-danger"
+          aria-label="Terminer"
+          title="Supprimer"
+          label="Supprimer"
+          style={{ height: "2rem" }}
+        /> 
       </div>
     );
   };

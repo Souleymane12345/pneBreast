@@ -2,9 +2,11 @@ import React, { useState, useEffect } from "react";
 import { FilterMatchMode, FilterOperator } from "primereact/api";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
+
+import {Container, Typography } from '@mui/material';
+
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
-import BlogPage from '../pages/BlogPage'; // Import BlogPage component
 
 
 
@@ -126,21 +128,14 @@ const UserPage = () => {
         <Button
           icon="pi pi-align-justify"
           className="p-button-sm p-button-primary"
-          aria-label="Enregistrer diagnostic"
-          title="Enregistrer diagnostic"
-          label="Enregistrer diagnostic"
+          aria-label="Voir details d'examen"
+          title="Voir details d'examen"
+          label="Voir details d'examen"
           style={{ height: "2rem" }}
           onClick={() => lienPatientParse("/dashboard/blog/", rowData.group_id)}
         />
 
-        &nbsp;&nbsp;&nbsp;&nbsp; {/* Add space between the buttons */}
-        <Button
-          className="p-button-sm p-button-danger"
-          aria-label="Terminer"
-          title="Supprimer"
-          label="Supprimer"
-          style={{ height: "2rem" }}
-        /> 
+
       </div>
     );
   };
@@ -148,7 +143,13 @@ const UserPage = () => {
   const header1 = renderHeader1();
 
   return (
-    <div className="datatable-filter-demo">
+    <Container maxWidth="xl">
+      <Typography variant="h4" sx={{ mb: 5 }}>
+        Listes des resultats de mammographie
+
+      </Typography>
+
+      <div className="datatable-filter-demo">
       <div className="card">
         <DataTable
           value={getCustomers(data)}
@@ -173,7 +174,16 @@ const UserPage = () => {
         </DataTable>
       </div>
     </div>
+
+
+
+
+
+  </Container>
+
   );
 };
 
 export default UserPage;
+
+
