@@ -37,6 +37,8 @@ import { config } from '../Constants'
 //################################################################################################//
 
 import initstate from "./reducers/connexion/userReducers";
+import initstateimagerie from "./reducers/imagerie";
+
 
 //################################################################################################//
 //######################################## connexion #############################################//
@@ -49,6 +51,7 @@ const rootReducer = combineReducers({
   //#############################################//
 
   userdata: initstate,
+  imgeriedata: initstateimagerie,
 
   //#############################################//
   //################# connexion #############
@@ -68,7 +71,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
   key:"root",
   storage: storage,
-  whitelist: ['userdata']
+  whitelist: ['userdata','imgeriedata']
 }
 
 const persistReducers = persistReducer(persistConfig, rootReducer)

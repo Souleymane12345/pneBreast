@@ -1,288 +1,189 @@
-import { filter } from 'lodash';
-import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-// @mui
-import {
-  Card,
-  Table,
-  Stack,
-  Paper,
+import React, { useState, useEffect } from "react";
+import { FilterMatchMode, FilterOperator } from "primereact/api";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
 
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
-  TableBody,
-  TableCell,
-  Container,
-  Typography,
-  IconButton,
-  TableContainer,
-  TablePagination,
-} from '@mui/material';
-// components
-import Label from '../components/label';
-import Iconify from '../components/iconify';
-import Scrollbar from '../components/scrollbar';
-// sections
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-// mock
-import USERLIST from '../_mock/user';
+import {Container, Typography } from '@mui/material';
 
-// ----------------------------------------------------------------------
-
-const TABLE_HEAD = [
-  { id: 'name', label: 'Mammographies', alignRight: false },
+import { InputText } from "primereact/inputtext";
+import { Button } from "primereact/button";
 
 
-  { id: '' },
-];
 
-// ----------------------------------------------------------------------
+import { useDispatch, useSelector } from "react-redux";
+//import { getsDemandesExamens } from "../../../reduxFiles/actions/radiologie/consultationRadiologieActions"
+import { useNavigate } from 'react-router-dom';
 
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
+//import { useHistory } from "react-router-dom";
+import { getsResultatsDemandesExamens } from "../Redux/actions/imagerie"
+
+const UserPage = () => {
+  const [first1, setFirst1] = useState(0);
+  const [rows1, setRows1] = useState(10);
+  //eslint-disable-next-line
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const data = useSelector((state) => state.imgeriedata.resultatsDemandesExamens);
+
+  console.log('data  data  data :', data)
+  //eslint-disable-next-line
+  const dispatch = useDispatch();
+  const [filters1, setFilters1] = useState(null);
+  const [globalFilterValue1, setGlobalFilterValue1] = useState("");
+
+  //const history = useHistory()
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    dispatch(getsResultatsDemandesExamens());
+    initFilters1();
+  }, [dispatch]);
+
+  const getCustomers = (data) => {
+    return [...(data || [])].map((d) => {
+      d.create_at = new Date(d.create_at);
+      return d;
+    });
+  };
+
+/** 
+  const lienPatientParse = (paths, rowData) => {
+    let path = `${paths}${btoa(rowData.id)}`
+      navigate(path);
+    //history.push(path)
   }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
+*/
+  const lienPatientParse = (paths, groupId) => {
+    let path = `${paths}${btoa(groupId)}`;
+    console.log('path path path:',path)
+    navigate(path);
+
+    // Rest of your code
   }
-  return 0;
-}
+  
+  
 
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
+  // Template de pagination du tableau
 
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return filter(array, (_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}
-
-export default function UserPage() {
-  const [open, setOpen] = useState(null);
-
-  const [page, setPage] = useState(0);
-
-  const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
-
-  const [orderBy, setOrderBy] = useState('name');
-
-  const [filterName, setFilterName] = useState('');
-
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleOpenMenu = (event) => {
-    setOpen(event.currentTarget);
+  const onCustomPage1 = (event) => {
+    setFirst1(event.first);
+    setRows1(event.rows);
+    setCurrentPage(event.page + 1);
   };
 
-  const handleCloseMenu = () => {
-    setOpen(null);
+  const onGlobalFilterChange1 = (e) => {
+    const value = e.target.value;
+    let _filters1 = { ...filters1 };
+    _filters1["global"].value = value;
+
+    setFilters1(_filters1);
+    setGlobalFilterValue1(value);
   };
 
-  const handleRequestSort = (event, property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
+  const initFilters1 = () => {
+    setFilters1({
+      global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+      reference: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+      },
+      create_at: {
+        operator: FilterOperator.AND,
+        constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+      },
+      validation: {
+        operator: FilterOperator.OR,
+        constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+      },
+    });
+    setGlobalFilterValue1("");
   };
 
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
+  const renderHeader1 = () => {
+    return (
+      <div className="flex justify-content-end">
+        {/* <Button
+          type="button"
+          icon="pi pi-filter-slash"
+          label="Annuler le filtre"
+          className="p-button-outlined"
+          onClick={clearFilter1}
+        /> */}
+        <span className="p-input-icon-left">
+          <i className="pi pi-search" />
+          <InputText
+            value={globalFilterValue1}
+            onChange={onGlobalFilterChange1}
+            placeholder="Rechercher un patient"
+          />
+        </span>
+      </div>
+    );
   };
 
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
+  const verifiedBodyTemplate = (rowData) => {
+    return (
+      <div className="d-flex">
+        <Button
+          icon="pi pi-align-justify"
+          className="p-button-sm p-button-primary"
+          aria-label="Voir details d'examens"
+          title="Voir details d'examens"
+          label="Voir details d'examens"
+          style={{ height: "2rem" }}
+          onClick={() => lienPatientParse("/dashboard/blog/", rowData.group_id)}
+        />
+
+
+      </div>
+    );
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setPage(0);
-    setRowsPerPage(parseInt(event.target.value, 10));
-  };
-
-  const handleFilterByName = (event) => {
-    setPage(0);
-    setFilterName(event.target.value);
-  };
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;
-
-  const filteredUsers = applySortFilter(USERLIST, getComparator(order, orderBy), filterName);
-
-  const isNotFound = !filteredUsers.length && !!filterName;
+  const header1 = renderHeader1();
 
   return (
-    <>
+    <Container maxWidth="xl">
+      <Typography variant="h4" sx={{ mb: 5 }}>
+        Listes des demandes de mammographie
 
+      </Typography>
 
-      <Container>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
-          <Typography variant="h4" gutterBottom>
-            Demandes d'examens
-          </Typography>
-
-        </Stack>
-
-        <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={USERLIST.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name } = row;
-                    const selectedUser = selected.indexOf(name) !== -1;
-
-                    return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
-
-                        <TableCell component="th" scope="row" padding="none">
-                          <Stack direction="row" alignItems="center" spacing={2}>
-                            <Typography variant="subtitle2" noWrap>
-                              {name}
-                            </Typography>
-                          </Stack>
-                        </TableCell>
-
-          
-
-               
-
-                        <TableCell align="right">
-                        <div style={{ display: "flex", justifyContent: "right" }}>
-                          <MenuItem>
-                            <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-                            Enregistrer
-                          </MenuItem>
-
-                          <MenuItem sx={{ color: 'error.main' }}>
-                            <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-                            Suprimer
-                          </MenuItem>
-                        </div>
-                        </TableCell>
-                        
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-
-                {isNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <Paper
-                          sx={{
-                            textAlign: 'center',
-                          }}
-                        >
-                          <Typography variant="h6" paragraph>
-                           Aucun résultat
-                          </Typography>
-
-                          <Typography variant="body2">
-                          Aucun résultat trouvé pour  &nbsp;
-                            <strong>&quot;{filterName}&quot;</strong>.
-                            <br /> Verifier l'orthographe.
-                          </Typography>
-                        </Paper>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={USERLIST.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+      <div className="datatable-filter-demo">
+      <div className="card">
+        <DataTable
+          value={getCustomers(data)}
+          paginator
+          rows={rows1}
+          first={first1}
+          onPage={onCustomPage1}
+          paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+          currentPageReportTemplate="Showing {first} to {last} of {totalRecords} items"
+          rowsPerPageOptions={[5, 10, 25, 50, 75, 100]}
+          globalFilter={globalFilterValue1}
+          filters={filters1}
+          header={header1}
+          emptyMessage="No data found"
+          className="p-datatable-customers"
+        >
+          <Column field="group_id" header="Group ID" sortable />
+          <Column
+            body={verifiedBodyTemplate}
+            style={{ textAlign: "right" }}
           />
-        </Card>
-      </Container>
+        </DataTable>
+      </div>
+    </div>
 
-      <Popover
-        open={Boolean(open)}
-        anchorEl={open}
-        onClose={handleCloseMenu}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        PaperProps={{
-          sx: {
-            p: 1,
-            width: 140,
-            '& .MuiMenuItem-root': {
-              px: 1,
-              typography: 'body2',
-              borderRadius: 0.75,
-            },
-          },
-        }}
-      >
-        <MenuItem>
-          <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
-          Enregistrer
-        </MenuItem>
 
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Suprimer
-        </MenuItem>
-      </Popover>
-    </>
+
+
+
+  </Container>
+
   );
-}
+};
+
+export default UserPage;
+
+

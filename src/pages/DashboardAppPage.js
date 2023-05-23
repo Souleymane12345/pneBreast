@@ -4,6 +4,9 @@ import { Helmet } from 'react-helmet-async';
 
 import {Container, Typography } from '@mui/material';
 import { Card, CardContent, Button } from "@mui/material";
+import { useDispatch } from "react-redux"
+import { postResultatDemandeExamen } from "../Redux/actions/imagerie"
+
 
 // components
 
@@ -14,6 +17,7 @@ import { Card, CardContent, Button } from "@mui/material";
 
 export default function DashboardAppPage() {
   // eslint-disable-next-line
+  const dispatch = useDispatch()
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [showImage, setShowImage] = useState(false);
@@ -30,10 +34,88 @@ export default function DashboardAppPage() {
     setPreviewUrls(urls);
   };
 
-  const handleFormSubmit = (event) => {
+  /** 
+
+    const handleFormSubmit = async (event) => {
     event.preventDefault();
-    // handle file upload logic here
+  
+    const formData = new FormData();
+  
+    // Loop through each selected file
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const imageFile = selectedFiles[i];
+      const reader = new FileReader();
+  
+      // Read the file as a data URL
+      const promise = new Promise((resolve, reject) => {
+        reader.onloadend = () => {
+          resolve(reader.result);
+        };
+        reader.onerror = reject;
+      });
+  
+      reader.readAsDataURL(imageFile);
+  
+      // Wait for the reader to load the file and resolve the promise
+      const dataUrl = await promise;
+      formData.append("uploaded_images", dataUrl);
+    }
+
+    console.log(...formData)
+  
+    dispatch(postResultatDemandeExamen(formData));
+  
+    // Continue with your logic here
   };
+  
+    
+    
+  */
+
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+  
+
+    // Array to store the image data
+    const imgData = [];
+    const formData = new FormData()
+
+  
+    // Loop through each selected file
+    for (let i = 0; i < selectedFiles.length; i++) {
+      const imageFile = selectedFiles[i];
+      const dataUrl = await readFileAsDataURL(imageFile);
+      imgData.push(dataUrl);
+     // formData.append("uploaded_images", dataUrl)
+
+      
+    }
+  
+    // Use the imgData array as needed
+
+    //console.log("formData:",imgData)
+
+  
+    dispatch(postResultatDemandeExamen(imgData))
+    
+    // Continue with your logic here
+  };
+  
+  
+  const readFileAsDataURL = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onloadend = () => {
+        resolve(reader.result);
+      };
+  
+      reader.onerror = reject;
+  
+      reader.readAsDataURL(file);
+    });
+  };
+  
 
   const showImageHandler = (index) => {
     setShowImage(true);
@@ -83,6 +165,7 @@ export default function DashboardAppPage() {
         <title> Dashboard | Minimal UI </title>
       </Helmet>
 
+      
       <Container maxWidth="xl">
         <Typography variant="h4" sx={{ mb: 5 }}>
           Detections du cancer des seins
@@ -93,7 +176,8 @@ export default function DashboardAppPage() {
 
           <Card>
             <CardContent>
-              <form onSubmit={handleFormSubmit}>
+            <form >
+
                 <input type="file" multiple onChange={handleFileInput} />
               </form>
               <div
@@ -166,7 +250,7 @@ export default function DashboardAppPage() {
                   Suprimer
                 </Button>
                 <div>&nbsp;</div>
-                <Button type="submit" variant="contained" color="error">
+                <Button type="submit" variant="contained" color="error" onClick= {handleFormSubmit}>
                   Lancer l'analyse
                 </Button>
               </div>

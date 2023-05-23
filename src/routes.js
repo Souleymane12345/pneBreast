@@ -34,7 +34,8 @@ export default function Router() {
         { path: 'app', element: <DashboardAppPage /> },
         { path: 'user', element: <UserPage /> },
         { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        { path: 'blog/:groupId', element: <BlogPage /> },
+        //{ path: 'blog', element: <BlogPage /> },
       ],
     },
 
@@ -45,6 +46,8 @@ export default function Router() {
         { element: <Navigate to="/connexion" />, index: true },
       ],
     },
+
+    
 
     {
       element: <SimpleLayout />,

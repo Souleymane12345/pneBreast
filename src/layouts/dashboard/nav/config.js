@@ -11,19 +11,14 @@ const navConfig = [
     path: '/dashboard/app',
     icon: icon('ic_analytics'),
   },
-  {
-    title: 'Radiographie',
-    path: '/dashboard/blog',
-    icon: icon('ic_blog'),
-  },
   
   {
-    title: 'Resultat',
+    title: 'Examens',
     path: '/dashboard/user',
     icon: icon('ic_user'),
   },
   {
-    title: 'Statitistique',
+    title: 'Resultats',
     path: '/dashboard/products',
     icon: icon('ic_cart'),
   },

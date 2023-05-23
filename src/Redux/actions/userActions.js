@@ -195,4 +195,3 @@ export const getEmailPasswordForget = (body) => (dispatch) => {
 export const clearStapperValues = () => (dispatch) => {
     dispatch({type: CLEAR_STAPPERS_VALUE_CONNEXION})
 }
-
