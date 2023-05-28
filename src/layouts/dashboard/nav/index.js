@@ -15,6 +15,11 @@ import NavSection from '../../../components/nav-section';
 //
 import navConfig from './config';
 
+import { loadUser } from '../../../Redux/actions/userActions';
+
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+
 // ----------------------------------------------------------------------
 
 const NAV_WIDTH = 280;
@@ -46,7 +51,22 @@ export default function Nav({ openNav, onCloseNav }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
 
+  const dispatch = useDispatch();
+
+
+  
+  useEffect(() => {
+    dispatch(loadUser())
+  }, []);
+
+
+  const data = useSelector((state) => state.userdata.user);
+
+  console.log(data);
+
   const renderContent = (
+
+    
     <Scrollbar
       sx={{
         height: 1,
@@ -64,7 +84,7 @@ export default function Nav({ openNav, onCloseNav }) {
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
-                {account.displayName}
+                {data.first_name} {data.last_name}
               </Typography>
 
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>

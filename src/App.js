@@ -10,7 +10,7 @@ import ThemeProvider from './theme';
 import { StyledChart } from './components/chart';
 import ScrollToTop from './components/scroll-to-top';
 import 'primereact/resources/primereact.min.css';
-import 'primeicons/primeicons.css';
+// import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/saga-blue/theme.css';
 
 
