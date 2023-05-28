@@ -43,7 +43,7 @@ export const postResultatDemandeExamen = (images) => (dispatch) => {
       console.log('formData:',formData)
   
       axios
-        .post(`/api/imagerie/resultatsimageries/`, formData, {
+        .post(`/api/imagerie/resultatsimageries/post/`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -96,6 +96,7 @@ export const getsResultatsDemandesExamens = () => (dispatch) => {
 export const getResultatDemandeExamen = (id) => (dispatch) => {
   if (localStorage.getItem("token_access") !== null) {
     const token = localStorage.getItem("token_access");
+    console.log('token id id:',id)
     dispatch({
       type: RESULTAT_DEMANDE_EXAMEN_RADIOLOGIE_GET_LOADING,
     });
@@ -103,7 +104,7 @@ export const getResultatDemandeExamen = (id) => (dispatch) => {
     axios
       .get(
         
-        `//api/imagerie/resultatsimageries/${id}/`,
+        `/api/imagerie/resultatsimageries/${id}/`,
         configHeadersToken(token)
       )
       .then((reponse) => {

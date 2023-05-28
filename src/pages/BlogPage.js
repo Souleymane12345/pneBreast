@@ -2,32 +2,64 @@
 
 
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from 'react-helmet-async';
 import { Container, Typography, Grid } from '@mui/material';
 import { Card, CardContent, CardMedia, Button, TextField } from "@mui/material";
+import { useParams } from "react-router-dom";
+import { baseURL } from "../Redux/axios";
+
 
 // components
 
 // sections Présence effective d'un cancer au sein de cette mammographie
 
+import { useDispatch, useSelector } from "react-redux";
+//import { useNavigate } from 'react-router-dom';
 
+//import { useHistory } from "react-router-dom";
+import { getResultatDemandeExamen } from "../Redux/actions/imagerie"
 
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   // eslint-disable-next-line
+  const dispatch = useDispatch()
 
   const [input1Value, setInput1Value] = useState("");
   const [input2Value, setInput2Value] = useState("");
   const [input3Value, setInput3Value] = useState("");
   const [submitValue, setSubmitValue] = useState("");
 
+
+  const params = useParams()
+
+  const imageDefaultValue = (e) => {
+    return baseURL + e ;
+    
+    // do something with the submitted value
+  } 
+
+  const params_id = atob(params?.groupId)
+
+  useEffect(() => {
+    console.log('data  getResultatDemandeExamen  data :')
+    dispatch(getResultatDemandeExamen(params_id))
+
+    //eslint-disable-next-line
+  }, [dispatch])
+
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
     // do something with the submitted value
   }
+
+  const data = useSelector((state) => state.imgeriedata.resultatDemandeExamen);
+
+  console.log('data  data  data :', data)
 
   return (
     <>
@@ -49,18 +81,12 @@ export default function DashboardAppPage() {
                 </Typography>
 
                 <Grid container spacing={2}>
-                  <Grid item xs={6} sm={3}>
-                    <img src="image1.jpg" alt="Image 1" />
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
-                    <img src="image2.jpg" alt="Image 2" />
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
-                    <img src="image3.jpg" alt="Image 3" />
-                  </Grid>
-                  <Grid item xs={6} sm={3}>
-                    <img src="image4.jpg" alt="Image 4" />
-                  </Grid>
+                  {data.map((image) => (
+                    <Grid item xs={6} sm={3} key={image.id}>
+                      { console.log('imageDefaultValue(image.image):',imageDefaultValue(image.image)) }
+                      <img src= {imageDefaultValue(image.image)}  alt={`Image ${image.id}`} />
+                    </Grid>
+                  ))}
                 </Grid>
               </CardContent>
 
@@ -196,6 +222,7 @@ export default function BlogPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Examen
         </Typography>
+///  {`http://127.0.0.1:8000${image.image}`}
 
         <Card>
           <CardContent>
