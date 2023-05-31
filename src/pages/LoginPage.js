@@ -49,7 +49,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | Minimal UI </title>
+        <title> Identification </title>
       </Helmet>
 
       <StyledRoot>
@@ -64,21 +64,21 @@ export default function LoginPage() {
         {mdUp && (
           <StyledSection>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
+              Bonjour, Bienvenue
             </Typography>
-            <img src="/assets/illustrations/illustration_login.png" alt="login" />
+            <img src="/assets/images/avatars/mamo.png" alt="login" />
           </StyledSection>
         )}
 
         <Container maxWidth="sm">
           <StyledContent>
             <Typography variant="h4" gutterBottom>
-              Sign in to Minimal
+              Identification
             </Typography>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
-              Don’t have an account? {''}
-              <Link to="/connexion">Get started</Link>
+              Avez vous un compte? {''}
+              <Link to="/connexion">Connexion</Link>
             </Typography>
 
             <Stack direction="row" spacing={2}>
@@ -97,7 +97,7 @@ export default function LoginPage() {
 
             <Divider sx={{ my: 3 }}>
               <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                OR
+                OU
               </Typography>
             </Divider>
 

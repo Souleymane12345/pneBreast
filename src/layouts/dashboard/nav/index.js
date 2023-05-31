@@ -80,7 +80,7 @@ export default function Nav({ openNav, onCloseNav }) {
       <Box sx={{ mb: 5, mx: 2.5 }}>
         <Link underline="none">
           <StyledAccount>
-            <Avatar src={account.photoURL} alt="photoURL" />
+            <Avatar src='/assets/images/avatars/doctor.png' alt="photoURL" />
 
             <Box sx={{ ml: 2 }}>
               <Typography variant="subtitle2" sx={{ color: 'text.primary' }}>
@@ -103,7 +103,7 @@ export default function Nav({ openNav, onCloseNav }) {
         <Stack alignItems="center" spacing={3} sx={{ pt: 5, borderRadius: 2, position: 'relative' }}>
           <Box
             component="img"
-            src="/assets/illustrations/illustration_avatar.png"
+            src="/assets/images/avatars/doctor.png"
             sx={{ width: 100, position: 'absolute', top: -50 }}
           />
 

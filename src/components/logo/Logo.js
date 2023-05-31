@@ -69,6 +69,8 @@ const Logo = forwardRef(({ disabledLink = false, sx, ...other }, ref) => {
             fill="url(#BG3)"
             d="M450 384c26.509 0 48-21.491 48-48s-21.491-48-48-48-48 21.491-48 48 21.491 48 48 48"
           />
+          <text x="52%" y="50%" dominantBaseline="middle" textAnchor="middle" font-size="4em" fill="black">MotherHelp</text>
+
         </g>
       </svg>
     </Box>
